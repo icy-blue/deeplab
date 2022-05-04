@@ -36,7 +36,7 @@ def upload():
     final = final.tolist()
     final = json.dumps(final)
     out = cv2.drawContours(src, contours, -1, (255, 0, 0), 3)
-    cv2.imwrite(out, 'static/tmp.png')
+    cv2.imwrite('static/tmp.png', out)
     return final
 
 

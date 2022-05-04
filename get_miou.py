@@ -18,26 +18,26 @@ if __name__ == "__main__":
     #   miou_mode为1代表仅仅获得预测结果。
     #   miou_mode为2代表仅仅计算miou。
     #---------------------------------------------------------------------------#
-    miou_mode       = 0
+    miou_mode       = 2
     #------------------------------#
     #   分类个数+1、如2+1
     #------------------------------#
-    num_classes     = 21
+    num_classes     = 2
     #--------------------------------------------#
     #   区分的种类，和json_to_dataset里面的一样
     #--------------------------------------------#
-    name_classes    = ["background","aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
-    # name_classes    = ["_background_","cat","dog"]
+    # name_classes    = ["background","aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
+    name_classes    = ["_background_","item"]
     #-------------------------------------------------------#
     #   指向VOC数据集所在的文件夹
     #   默认指向根目录下的VOC数据集
     #-------------------------------------------------------#
     VOCdevkit_path  = 'VOCdevkit'
 
-    image_ids       = open(os.path.join(VOCdevkit_path, "VOC2007/ImageSets/Segmentation/val.txt"),'r').read().splitlines() 
-    gt_dir          = os.path.join(VOCdevkit_path, "VOC2007/SegmentationClass/")
-    miou_out_path   = "miou_out"
-    pred_dir        = os.path.join(miou_out_path, 'detection-results')
+    image_ids       = open(os.path.join(VOCdevkit_path, "irc/ImageSets/Segmentation/val.txt"),'r').read().splitlines() 
+    gt_dir          = os.path.join(VOCdevkit_path, "irc/SegmentationClass/")
+    miou_out_path   = ".output/"
+    pred_dir        = miou_out_path #os.path.join(miou_out_path, 'detection-results')
 
     if miou_mode == 0 or miou_mode == 1:
         if not os.path.exists(pred_dir):

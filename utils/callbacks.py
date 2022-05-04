@@ -38,8 +38,8 @@ class LossHistory():
             f.write(str(val_loss))
             f.write("\n")
 
-        self.writer.add_scalar('loss', loss, epoch)
-        self.writer.add_scalar('val_loss', val_loss, epoch)
+        self.writer.add_scalar('train_loss', loss, epoch)
+        self.writer.add_scalar('test_loss', val_loss, epoch)
         self.loss_plot()
 
     def loss_plot(self):
@@ -47,7 +47,7 @@ class LossHistory():
 
         plt.figure()
         plt.plot(iters, self.losses, 'red', linewidth = 2, label='train loss')
-        plt.plot(iters, self.val_loss, 'coral', linewidth = 2, label='val loss')
+        plt.plot(iters, self.val_loss, 'coral', linewidth = 2, label='test loss')
         try:
             if len(self.losses) < 25:
                 num = 5
@@ -55,7 +55,7 @@ class LossHistory():
                 num = 15
             
             plt.plot(iters, scipy.signal.savgol_filter(self.losses, num, 3), 'green', linestyle = '--', linewidth = 2, label='smooth train loss')
-            plt.plot(iters, scipy.signal.savgol_filter(self.val_loss, num, 3), '#8B4513', linestyle = '--', linewidth = 2, label='smooth val loss')
+            plt.plot(iters, scipy.signal.savgol_filter(self.val_loss, num, 3), '#8B4513', linestyle = '--', linewidth = 2, label='smooth test loss')
         except:
             pass
 

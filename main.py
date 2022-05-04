@@ -32,14 +32,18 @@ def upload():
     for i in contours:
         if len(i) >= max:
             final = i
+            max = len(i)
     final = final.tolist()
     final = json.dumps(final)
+    out = cv2.drawContours(src, contours, max, (255, 0, 0), 3)
+    cv2.imwrite(out, 'static/tmp.png')
     return final
 
 
 @app.route('/')
 def index():
     return flask.render_template('index.html')
+
 
 def main():
     app.run()

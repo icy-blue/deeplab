@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="/static/icon/bootstrap-icons.css" crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="/static/bootstrap/3.3.7/css/all.css" crossorigin="anonymous"/>
+
+
+    <!-- Bootstrap 主题 -->
+    <link rel="stylesheet" href="/static/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="/static/bootstrap-fileinput/css/fileinput.css" crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="/static/bootstrap-fileinput/css/fileinput-rtl.min.css" crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="/static/bootstrap-fileinput/themes/explorer-fas/theme.min.css" crossorigin="anonymous"/>
+
+    <!-- jQuery -->
+    <script src="/static/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="/static/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script src="/static/bootstrap-fileinput/js/fileinput.js" crossorigin="anonymous"></script>
+
+    <script src="/static/bootstrap-fileinput/js/locales/zh.js" crossorigin="anonymous"></script>
+
+    <script src="/static/bootstrap-fileinput/themes/explorer-fas/theme.min.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div class="container" style="display: flex">
+        <div id="left">
+            <input id="fileinput" class="file" type="file" accept="image/*" >
+            <button type="button" class="btn btn-primary btn-block" style="margin-top: 10px" id="submit">识别</button>
+
+        </div>
+    </div>
+    <script>
+        let input = document.getElementById("fileinput");
+        input.addEventListener('change', function(e){
+            let file = document.getElementById("input").files[0];
+            let img = document.getElementById("img");
+            handle(img, file);
+        });
+        $("#submit").click(()=>{
+            $.ajax({
+                url: "/check",
+                type: "get",
+                processData: false,
+                contentType: false,
+                datatype: 'text',
+                success: function (data) {
+                    console.log(data);
+                    let obj = jQuery.parseJSON(data);
+                    $("#size").text('推荐尺码：' + obj['size']);
+                    $("#link").html('服装链接：' + '<a href="' + obj['link'] + '">' + obj['link'] + '</a>');
+                    $('#img').attr('src', '/static/show/' + obj['answer'] + '.png');
+                    $('#showimg').attr('style', 'text-align: center');
+                    $('#img2').attr('src', '/static/result.jpg?use=' + Math.random());
+                    {#$('#left').attr('style', 'display: none;');#}
+                }
+            })
+        });
+        function handle(img, file) {
+            img.classList.add("obj");
+            img.file = file;
+            let reader = new FileReader();
+            reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+            reader.readAsDataURL(file);
+        }
+        $(document).ready(
+            function() {
+
+                console.log("done");
+            });
+    </script>
+</body>
+
+</html>

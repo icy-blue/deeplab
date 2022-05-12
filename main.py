@@ -13,7 +13,7 @@ deeplab = DeeplabV3()
 
 
 @app.route('/v2/upload', methods=['POST'])
-def upload():
+def uploadV2():
     f = request.files['file_data']
     num = random.randint(1, 1000)
     dir = './tmp/'
@@ -37,10 +37,8 @@ def upload():
     final['contours'] = tmp.tolist()
     ans = 0
     for i in tmp:
-        print(i)
-        ans += pr3[i[0]][i[1]]
+        ans += pr3[i[1]-1][i[0]-1]
     final['credibility'] = ans.item() / tmp.shape[0]
-    print(type(final['credibility']))
     final = json.dumps(final)
     out = cv2.drawContours(src, contours, -1, (255, 0, 0), 3)
     cv2.imwrite('static/tmp.png', out)

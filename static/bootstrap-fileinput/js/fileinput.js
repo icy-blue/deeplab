@@ -6126,7 +6126,7 @@
         pauseClass: defBtnCss2,
         uploadIcon: '<i class="bi-upload"></i>',
         uploadClass: defBtnCss2,
-        uploadUrl: '/upload',
+        uploadUrl: '/v2/upload',
         uploadUrlThumb: null,
         uploadAsync: true,
         uploadParamNames: {

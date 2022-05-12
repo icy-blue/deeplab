@@ -12,6 +12,41 @@ app = flask.Flask(__name__)
 deeplab = DeeplabV3()
 
 
+@app.route('/v2/upload', methods=['POST'])
+def upload():
+    f = request.files['file_data']
+    num = random.randint(1, 1000)
+    dir = './tmp/'
+    end = f.filename.split('.')[-1]
+    img = os.path.join(dir, str(num) + end)
+    f.save(img)
+    image = Image.open(img)
+    r_image, pr3 = deeplab.detect_image(image)
+    r_image.save('tmp.jpg')
+    src = cv.imread('tmp.jpg')
+    gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+    ret, binary = cv2.threshold(gray, 177, 255, cv2.THRESH_BINARY)
+    contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    maxs = 0
+    final = {}
+    tmp = None
+    for i in contours:
+        if len(i) >= maxs:
+            tmp = i.squeeze()
+            maxs = len(i)
+    final['contours'] = tmp.tolist()
+    ans = 0
+    for i in tmp:
+        print(i)
+        ans += pr3[i[0]][i[1]]
+    final['credibility'] = ans.item() / tmp.shape[0]
+    print(type(final['credibility']))
+    final = json.dumps(final)
+    out = cv2.drawContours(src, contours, -1, (255, 0, 0), 3)
+    cv2.imwrite('static/tmp.png', out)
+    return final
+
+
 @app.route('/upload', methods=['POST'])
 def upload():
     f = request.files['file_data']
@@ -21,7 +56,7 @@ def upload():
     img = os.path.join(dir, str(num) + end)
     f.save(img)
     image = Image.open(img)
-    r_image = deeplab.detect_image(image)
+    r_image, pr3 = deeplab.detect_image(image)
     r_image.save('tmp.jpg')
     src = cv.imread('tmp.jpg')
     gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)

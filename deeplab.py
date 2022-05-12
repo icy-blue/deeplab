@@ -146,6 +146,7 @@ class DeeplabV3(object):
             #   进行图片的resize
             #---------------------------------------------------#
             pr = cv2.resize(pr, (orininal_w, orininal_h), interpolation = cv2.INTER_LINEAR)
+            pr3 = torch.max(torch.tensor(pr), 2)[0]
             #---------------------------------------------------#
             #   取出每一个像素点的种类
             #---------------------------------------------------#
@@ -186,7 +187,7 @@ class DeeplabV3(object):
             #------------------------------------------------#
             image = Image.fromarray(np.uint8(seg_img))
         
-        return image
+        return image, pr3
 
     def get_FPS(self, image, test_interval):
         #---------------------------------------------------------#

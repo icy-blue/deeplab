@@ -27,20 +27,22 @@ def uploadV2():
     gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
     ret, binary = cv2.threshold(gray, 177, 255, cv2.THRESH_BINARY)
     contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    maxs = 0
+    _max = 0
     final = {}
+    _index = -1
     tmp = None
-    for i in contours:
-        if len(i) >= maxs:
+    for id, i in enumerate(contours):
+        if len(i) >= _max:
             tmp = i.squeeze()
-            maxs = len(i)
+            _max = len(i)
+            _index = id
     final['contours'] = tmp.tolist()
     ans = 0
     for i in tmp:
         ans += pr3[i[1]-1][i[0]-1]
     final['credibility'] = ans.item() / tmp.shape[0]
     final = json.dumps(final)
-    out = cv2.drawContours(src, contours, -1, (255, 0, 0), 3)
+    out = cv2.drawContours(src, contours, _index, (255, 0, 0), 3)
     cv2.imwrite('static/tmp.png', out)
     return final
 
@@ -60,15 +62,17 @@ def upload():
     gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
     ret, binary = cv2.threshold(gray, 177, 255, cv2.THRESH_BINARY)
     contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    max = 0
+    _max = 0
     final = None
-    for i in contours:
-        if len(i) >= max:
+    _index = -1
+    for id, i in enumerate(contours):
+        if len(i) >= _max:
             final = i
-            max = len(i)
+            _max = len(i)
+            _index = id
     final = final.tolist()
     final = json.dumps(final)
-    out = cv2.drawContours(src, contours, -1, (255, 0, 0), 3)
+    out = cv2.drawContours(src, contours, _index, (255, 0, 0), 3)
     cv2.imwrite('static/tmp.png', out)
     return final
 

@@ -140,3 +140,6 @@ dmypy.json
 
 .idea/
 tmp/
+
+tmp.jpg
+static/tmp.png

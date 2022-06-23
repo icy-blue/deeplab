@@ -36,7 +36,10 @@ def uploadV2():
             tmp = i.squeeze()
             _max = len(i)
             _index = id
-    final['contours'] = tmp.tolist() if tmp is not None else None
+    if tmp is None:
+        final['contours'] = None
+        return final
+    final['contours'] = tmp.tolist()
     ans = 0
     for i in tmp:
         ans += pr3[i[1]-1][i[0]-1]

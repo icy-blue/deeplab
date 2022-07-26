@@ -36,6 +36,9 @@ def uploadV2():
             tmp = i.squeeze()
             _max = len(i)
             _index = id
+    if tmp is None:
+        final['contours'] = None
+        return final
     final['contours'] = tmp.tolist()
     ans = 0
     for i in tmp:
@@ -44,7 +47,7 @@ def uploadV2():
     final = json.dumps(final)
     out = cv2.drawContours(src, contours, _index, (255, 0, 0), 3)
     cv2.imwrite('static/tmp.png', out)
-    return final
+    return "123456"
 
 
 @app.route('/upload', methods=['POST'])

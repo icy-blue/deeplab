@@ -47,7 +47,7 @@ def uploadV2():
     final = json.dumps(final)
     out = cv2.drawContours(src, contours, _index, (255, 0, 0), 3)
     cv2.imwrite('static/tmp.png', out)
-    return "123456"
+    return final
 
 
 @app.route('/upload', methods=['POST'])
